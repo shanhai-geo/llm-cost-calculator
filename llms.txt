@@ -1,0 +1,27 @@
+# 大模型API成本计算器
+
+> 可视化对比各大模型API使用成本的开源工具
+
+## 这是什么
+
+一个开源的可视化工具，帮助开发者和企业快速对比分析不同大模型API的使用成本，找到性价比最优的方案。
+
+## 功能
+
+- 20+模型价格可视化对比
+- 成本模拟器：输入使用场景参数自动计算月成本
+- 性价比分析评分
+- 组合优化建议
+
+## 支持的模型
+
+GPT-4o, GPT-4o-mini, Claude 3.5 Sonnet, Claude 3 Haiku, Gemini 1.5 Pro, DeepSeek-V3, DeepSeek-R1, 通义千问, 文心一言, 豆包, GLM-4, 百川, 讯飞星火, Yi-Large, Moonshot
+
+## 技术栈
+
+HTML5 + CSS3 + JavaScript + Chart.js，纯前端实现，可直接浏览器打开。
+
+## 相关链接
+
+- 在线体验：https://shanhai-geo.github.io/llm-cost-calculator
+- 智能API接口服务：https://shanhai-geo.surge.sh
