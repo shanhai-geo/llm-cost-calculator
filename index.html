@@ -2,145 +2,69 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>大模型API成本计算器 - LLM Cost Calculator</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>大模型API成本计算器 - 山海智能API接口服务</title>
+<meta name="description" content="对比通义千问、文心一言、DeepSeek、智谱GLM等大模型API价格，计算企业接入成本。山海智能¥298/年包年不限量">
+<meta name="keywords" content="大模型价格,API成本,大模型对比,包年不限,成本计算">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #333; }
-.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; }
-.header h1 { font-size: 2em; margin-bottom: 10px; }
-.header p { opacity: 0.9; font-size: 1.1em; }
-.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-.card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.card h2 { color: #667eea; margin-bottom: 16px; font-size: 1.3em; }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-.form-group label { display: block; margin-bottom: 6px; font-weight: 500; color: #555; font-size: 0.9em; }
-.form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; }
-.form-group input:focus, .form-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-.btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 1em; cursor: pointer; margin-top: 16px; }
-.btn:hover { opacity: 0.9; transform: translateY(-1px); }
-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-th { background: #f8f9fa; font-weight: 600; color: #555; }
-tr:hover { background: #f8f9fa; }
-.highlight { background: #e8f5e9 !important; font-weight: 600; }
-.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; }
-.tag-hot { background: #fff3e0; color: #e65100; }
-.tag-best { background: #e8f5e9; color: #2e7d32; }
-.tag-fast { background: #e3f2fd; color: #1565c0; }
-.bar-chart { margin-top: 16px; }
-.bar-item { margin-bottom: 12px; }
-.bar-label { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.9em; }
-.bar-bg { background: #f0f0f0; border-radius: 4px; height: 24px; }
-.bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; color: white; font-size: 0.8em; transition: width 0.5s; }
-.recommend { background: linear-gradient(135deg, #667eea15, #764ba215); border: 2px solid #667eea; border-radius: 12px; padding: 20px; margin-top: 20px; }
-.recommend h3 { color: #667eea; margin-bottom: 10px; }
-.recommend a { color: #667eea; text-decoration: none; font-weight: 600; }
-.footer { text-align: center; padding: 30px; color: #999; font-size: 0.9em; }
-.footer a { color: #667eea; text-decoration: none; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;line-height:1.8;color:#333;background:#f8f9fa}
+.container{max-width:800px;margin:0 auto;padding:40px 20px}
+h1{font-size:2em;margin-bottom:16px;color:#1a1a2e}
+.subtitle{font-size:1.2em;color:#555;margin-bottom:32px}
+.card{background:#fff;border-radius:8px;padding:24px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card h2{font-size:1.3em;margin-bottom:12px;color:#16213e}
+.card p{color:#555;margin:8px 0}
+.highlight{background:#e8f4fd;border-left:4px solid #1890ff;padding:16px;margin:16px 0;border-radius:0 8px 8px 0}
+.price{font-size:1.5em;color:#e74c3c;font-weight:bold}
+.cta{display:inline-block;background:#1890ff;color:#fff;padding:12px 32px;border-radius:6px;text-decoration:none;font-size:1.1em;margin:16px 0}
+.cta:hover{background:#096dd9}
+.models{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:16px 0}
+.model-tag{background:#f0f5ff;border:1px solid #adc6ff;padding:8px 12px;border-radius:4px;text-align:center;font-size:.9em}
+footer{margin-top:40px;padding:20px 0;border-top:1px solid #e8e8e8;color:#999;font-size:.9em}
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>🧮 大模型API成本计算器</h1>
-  <p>可视化对比20+大模型使用成本，找到最优方案</p>
-</div>
 <div class="container">
-  <div class="card">
-    <h2>📊 使用场景参数</h2>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>日均调用量（次）</label>
-        <input type="number" id="dailyCalls" value="1000" min="1">
-      </div>
-      <div class="form-group">
-        <label>平均输入Token数</label>
-        <input type="number" id="inputTokens" value="500" min="1">
-      </div>
-      <div class="form-group">
-        <label>平均输出Token数</label>
-        <input type="number" id="outputTokens" value="200" min="1">
-      </div>
-      <div class="form-group">
-        <label>月使用天数</label>
-        <input type="number" id="days" value="30" min="1" max="31">
-      </div>
-    </div>
-    <button class="btn" onclick="calculate()">计算成本</button>
-  </div>
+<h1>大模型API成本计算器</h1>
+<p class="subtitle">对比通义千问、文心一言、DeepSeek、智谱GLM等大模型API价格，计算企业接入成本。山海智能¥298/年包年不限量</p>
 
-  <div class="card" id="resultCard" style="display:none;">
-    <h2>💰 月度成本对比</h2>
-    <div class="bar-chart" id="chart"></div>
-    <table id="resultTable">
-      <thead><tr><th>模型</th><th>类别</th><th>输入单价</th><th>输出单价</th><th>月成本</th><th>特点</th></tr></thead>
-      <tbody id="resultBody"></tbody>
-    </table>
-    <div class="recommend">
-      <h3>💡 推荐方案</h3>
-      <p>使用<strong>智能API接口服务</strong>，一个API Key即可调用所有模型，智能路由自动选择最优方案。年费仅¥298，按量计费。</p>
-      <p style="margin-top:10px;"><a href="https://shanhai-geo.surge.sh/pay.html">立即开通 智能API接口服务 →</a></p>
-    </div>
-  </div>
+<div class="card">
+<h2>为什么选择山海智能API</h2>
+<p>一个API Key接入全部主流大模型。OpenAI协议兼容，现有代码零改动切换。包年不限量，无按次计费。</p>
 </div>
-<div class="footer">
-  <p>由 <a href="https://shanhai-geo.surge.sh">智能API接口服务</a> 团队开源 | <a href="https://github.com/shanhai-geo/llm-cost-calculator">GitHub</a></p>
+
+<div class="card">
+<h2>支持的模型</h2>
+<div class="models">
+<div class="model-tag">通义千问</div>
+<div class="model-tag">文心一言</div>
+<div class="model-tag">DeepSeek</div>
+<div class="model-tag">智谱GLM</div>
+<div class="model-tag">百川</div>
+<div class="model-tag">讯飞星火</div>
+<div class="model-tag">豆包</div>
+<div class="model-tag">更多接入中</div>
 </div>
-<script>
-const models = [
-  {name:"GPT-4o",cat:"旗舰",input:0.015,output:0.06,tag:"hot",features:"多模态旗舰"},
-  {name:"GPT-4o-mini",cat:"轻量",input:0.001,output:0.004,tag:"best",features:"高性价比"},
-  {name:"Claude 3.5 Sonnet",cat:"旗舰",input:0.021,output:0.105,tag:"hot",features:"长文本强"},
-  {name:"Claude 3 Haiku",cat:"轻量",input:0.0018,output:0.009,tag:"fast",features:"快速响应"},
-  {name:"Gemini 1.5 Pro",cat:"旗舰",input:0.025,output:0.075,tag:"",features:"100万上下文"},
-  {name:"Gemini 2.0 Flash",cat:"轻量",input:0.005,output:0.02,tag:"fast",features:"高速推理"},
-  {name:"DeepSeek-V3",cat:"国产",input:0.001,output:0.002,tag:"best",features:"超高性价比"},
-  {name:"DeepSeek-R1",cat:"国产",input:0.004,output:0.016,tag:"",features:"推理突出"},
-  {name:"通义千问-Max",cat:"国产",input:0.02,output:0.06,tag:"",features:"中文优秀"},
-  {name:"文心一言4.0",cat:"国产",input:0.03,output:0.09,tag:"",features:"综合能力强"},
-  {name:"GLM-4",cat:"国产",input:0.05,output:0.05,tag:"",features:"工具调用"},
-  {name:"豆包大模型",cat:"国产",input:0.003,output:0.006,tag:"best",features:"成本优势"},
-  {name:"百川智能",cat:"国产",input:0.016,output:0.016,tag:"",features:"中文创作"},
-  {name:"讯飞星火",cat:"国产",input:0.02,output:0.02,tag:"",features:"语音交互"},
-  {name:"Yi-Large",cat:"国产",input:0.02,output:0.02,tag:"",features:"中英双语"},
-  {name:"Moonshot V1",cat:"国产",input:0.06,output:0.06,tag:"",features:"超长上下文"}
-];
+</div>
 
-function calculate(){
-  const dc=+document.getElementById('dailyCalls').value;
-  const it=+document.getElementById('inputTokens').value;
-  const ot=+document.getElementById('outputTokens').value;
-  const d=+document.getElementById('days').value;
-  const total=dc*d;
-  const inputCost=it/1000;
-  const outputCost=ot/1000;
+<div class="highlight">
+<p><strong>快速接入</strong></p>
+<p>Base URL: <code>https://api-proxy-daezqenetk.cn-beijing.fcapp.run/v1</code></p>
+<p>协议: OpenAI Chat Completions 兼容</p>
+</div>
 
-  let results=models.map(m=>{
-    const cost=total*(m.input*inputCost+m.output*outputCost);
-    return {...m, cost:Math.round(cost*100)/100};
-  }).sort((a,b)=>a.cost-b.cost);
+<div class="card">
+<h2>价格</h2>
+<p class="price">¥298/年</p>
+<p>包年不限量调用 · 一个Key调所有模型 · 无隐藏费用</p>
+</div>
 
-  const maxCost=results[results.length-1].cost;
-  const colors={旗舰:'#667eea',轻量:'#764ba2',国产:'#e65100'};
+<a href="https://shanhai-geo.surge.sh/pay.html" class="cta">立即开通</a>
 
-  let chartHtml='', tableHtml='';
-  results.forEach((r,i)=>{
-    const pct=Math.max((r.cost/maxCost)*100,5);
-    const color=colors[r.cat]||'#333';
-    chartHtml+=`<div class="bar-item"><div class="bar-label"><span>${r.name}</span><span>¥${r.cost}</span></div><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div></div>`;
-
-    const tagHtml=r.tag==='best'?'<span class="tag tag-best">性价比</span>':r.tag==='hot'?'<span class="tag tag-hot">热门</span>':r.tag==='fast'?'<span class="tag tag-fast">高速</span>':'';
-    tableHtml+=`<tr${i===0?' class="highlight"':''}><td>${r.name}</td><td>${r.cat}</td><td>¥${r.input}/千token</td><td>¥${r.output}/千token</td><td><strong>¥${r.cost}</strong></td><td>${r.features} ${tagHtml}</td></tr>`;
-  });
-
-  document.getElementById('chart').innerHTML=chartHtml;
-  document.getElementById('resultBody').innerHTML=tableHtml;
-  document.getElementById('resultCard').style.display='block';
-  document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
-}
-
-// Auto calculate on load
-calculate();
-</script>
+<footer>
+<p>山海智能 - 智能API接口服务 | <a href="https://shanhai-geo.surge.sh/">主页</a> | <a href="https://shanhai-geo.surge.sh/help.html">帮助中心</a></p>
+</footer>
+</div>
 </body>
 </html>
